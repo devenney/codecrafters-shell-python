@@ -24,11 +24,16 @@ def shellType(command):
     if command in commands.keys():
         print(f"{command} is a shell builtin")
         return
-    elif findCommandInPath(command):
-        return
-    print(f"{command}: not found")
+    else:
+        result = findCommandInPath(command)
+        if result is None:
+            print(f"{command}: not found")
+            return
+
+        print(f"{command} is {result}")
 
 
+# TODO(devenney): replace with shutil.which once we're done with learning file traversal
 def findCommandInPath(file):
     path = os.environ["PATH"]
 
@@ -41,9 +46,8 @@ def findCommandInPath(file):
     for dir in dirs:
         candidate = os.path.join(dir, file)
         if os.path.isfile(candidate):
-            print(f"{file} is {candidate}")
-            return True
-    return False
+            return candidate
+    return
 
 
 @register_command("exit")
@@ -58,27 +62,34 @@ def shellNotFound(command):
     print(f"{command[0]}: command not found")
 
 
+def run_command(cmd):
+    command, *args = cmd
+
+    # Empty or pure whitespace
+    if not command or command == "":
+        return
+
+    # Builtin command
+    if command in commands:
+        try:
+            commands[command](*args)
+        except TypeError as error:
+            print(f"{command}: invalid arguments ({error})")
+        return
+
+
 def main():
     while True:
         # Print prompt
         sys.stdout.write("$ ")
 
         # Collect input
-        cmd = input().split(" ")
-        command, *args = cmd
+        try:
+            cmd = input().split(" ")
+        except (EOFError, KeyboardInterrupt):
+            break
 
-        # Handle empty or pure whitespace
-        if not command or command == "":
-            continue
-
-        # Dispatch command
-        if command in commands:
-            try:
-                commands[command](*args)
-            except TypeError as error:
-                print(f"{command}: invalid arguments ({error})")
-        else:
-            shellNotFound(cmd)
+        run_command(cmd)
 
 
 if __name__ == "__main__":
