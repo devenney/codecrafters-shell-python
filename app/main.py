@@ -6,8 +6,18 @@ def main():
         sys.stdout.write("$ ")
 
         # Wait for user input
-        command = input()
-        print(f"{command}: command not found")
+        user_input = input()
+        command = user_input.split()[0]
+        args = user_input.split()[1:]
+
+        match command:
+            case "exit":
+                if len(args) > 0:
+                    exit(args[0])
+                else:
+                    exit()
+            case _:
+                print(f"{command}: command not found")
 
 
 if __name__ == "__main__":
