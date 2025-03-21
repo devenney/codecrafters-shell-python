@@ -84,7 +84,7 @@ def run_command(cmd):
         shellNotFound(cmd)
         return
 
-    subprocess.run(command + args)
+    subprocess.run([command] + args)
 
 
 def main():
