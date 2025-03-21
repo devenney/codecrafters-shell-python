@@ -36,7 +36,7 @@ def shellType(command):
 
 @register_command("pwd")
 def shellPWD():
-    pwd = os.cwd()
+    pwd = os.getcwd()
     print(f"pwd is {pwd}")
 
 
