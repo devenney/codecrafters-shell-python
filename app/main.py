@@ -1,6 +1,33 @@
 import sys
 
 
+commands = {}
+
+
+def register_command(name):
+    def decorator(func):
+        commands[name] = func
+        return func
+    return decorator
+
+
+@register_command("echo")
+def shellEcho(*args):
+    print(f"{' '.join(args)}")
+
+
+@register_command("exit")
+def shellExit(code):
+    try:
+        sys.exit(int(code))
+    except ValueError:
+        print(f"exit: {code}: numeric argument required")
+
+
+def shellNotFound(command):
+    print(f"{command[0]}: command not found")
+
+
 def main():
     while True:
         # Print prompt
@@ -8,17 +35,20 @@ def main():
 
         # Collect input
         cmd = input().split(" ")
+        command, *args = cmd
 
-        # Process input
-        match cmd:
-            case ["echo", *words]:
-                print(f"{' '.join(words)}")
-            case ["exit", code]:
-                exit(int(code))
-            case [""]:
-                continue
-            case _:
-                print(f"{cmd[0]}: command not found")
+        # Handle empty or pure whitespace
+        if not command or command == "":
+            continue
+    
+        # Dispatch command
+        if command in commands:
+            try:
+                commands[command](*args)
+            except TypeError:
+                print(f"{command}: invalid arguments")
+        else:
+            shellNotFound(cmd)
 
 
 if __name__ == "__main__":
