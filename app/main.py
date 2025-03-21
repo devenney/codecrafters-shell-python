@@ -1,4 +1,5 @@
 import os
+import platform
 import re
 import sys
 
@@ -29,15 +30,19 @@ def shellType(command):
 
 
 def findCommandInPath(file):
-    # path = os.environ["PATH"]
-    path = "/usr/bin:/usr/local/bin"
-    dirs = re.split(';|:', path)
-    for dir in dirs:
-        for (dirpath, _, filenames) in os.walk(dir):
-            if file in filenames:
-                print(f"{file} is {os.path.join(dirpath, file)}")
-                return True
+    path = os.environ["PATH"]
 
+    dirs = []
+    if platform.system() == "Windows":
+        dirs = re.split(r'[;]', path)
+    else:
+        dirs = re.split(r'[:]', path)
+
+    for dir in dirs:
+        candidate = os.path.join(dir, file)
+        if os.path.isfile(candidate):
+            print(f"{file} is {candidate}")
+            return True
     return False
 
 
