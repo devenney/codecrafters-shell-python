@@ -1,3 +1,5 @@
+import os
+import re
 import sys
 
 
@@ -20,8 +22,23 @@ def shellEcho(*args):
 def shellType(command):
     if command in commands.keys():
         print(f"{command} is a shell builtin")
-    else:
-        print(f"{command}: not found")
+        return
+    elif findCommandInPath(command):
+        return
+    print(f"{command}: not found")
+
+
+def findCommandInPath(file):
+    path = os.environ["PATH"]
+
+    dirs = re.split(';|,', path)
+    for dir in dirs:
+        for (dirpath, _, filenames) in os.walk(dir):
+            if file in filenames:
+                print(f"{file} is {os.path.join(dirpath, file)}")
+                return True
+
+    return False
 
 
 @register_command("exit")
@@ -53,8 +70,8 @@ def main():
         if command in commands:
             try:
                 commands[command](*args)
-            except TypeError:
-                print(f"{command}: invalid arguments")
+            except TypeError as error:
+                print(f"{command}: invalid arguments ({error})")
         else:
             shellNotFound(cmd)
 
