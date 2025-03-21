@@ -29,9 +29,9 @@ def shellType(command):
 
 
 def findCommandInPath(file):
-    path = os.environ["PATH"]
-
-    dirs = re.split(';|,', path)
+    # path = os.environ["PATH"]
+    path = "/usr/bin:/usr/local/bin"
+    dirs = re.split(';|:', path)
     for dir in dirs:
         for (dirpath, _, filenames) in os.walk(dir):
             if file in filenames:
