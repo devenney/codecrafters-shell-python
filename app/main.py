@@ -8,12 +8,14 @@ def main():
         # Wait for user input
         user_input = input()
         command = user_input.split()[0]
-        args = user_input.split()[1:]
+        arg_str = user_input.removeprefix(command + '')
 
         match command:
+            case "echo":
+                print(f"{arg_str}")
             case "exit":
-                if len(args) > 0:
-                    exit(int(args[0]))
+                if len(arg_str) > 0:
+                    exit(int(arg_str))
                 else:
                     exit()
             case _:
