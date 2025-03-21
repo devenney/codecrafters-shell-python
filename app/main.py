@@ -37,7 +37,7 @@ def shellType(command):
 @register_command("pwd")
 def shellPWD():
     pwd = os.getcwd()
-    print(f"pwd is {pwd}")
+    print(f"{pwd}")
 
 
 # TODO(devenney): replace with shutil.which once we're done with learning file traversal
