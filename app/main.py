@@ -16,6 +16,14 @@ def shellEcho(*args):
     print(f"{' '.join(args)}")
 
 
+@register_command("type")
+def shellType(command):
+    if command in commands.keys():
+        print(f"{command} is a shell builtin")
+    else:
+        print(f"{command}: not found")
+
+
 @register_command("exit")
 def shellExit(code):
     try:
