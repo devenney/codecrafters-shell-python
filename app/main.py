@@ -1,6 +1,7 @@
 import os
 import platform
 import re
+import subprocess
 import sys
 
 
@@ -76,6 +77,14 @@ def run_command(cmd):
         except TypeError as error:
             print(f"{command}: invalid arguments ({error})")
         return
+
+    # External command
+    external = findCommandInPath(command)
+    if external is None:
+        shellNotFound(cmd)
+        return
+
+    subprocess.run([external] + args)
 
 
 def main():
