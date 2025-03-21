@@ -34,6 +34,12 @@ def shellType(command):
         print(f"{command} is {result}")
 
 
+@register_command("pwd")
+def shellPWD():
+    pwd = os.cwd()
+    print(f"pwd is {pwd}")
+
+
 # TODO(devenney): replace with shutil.which once we're done with learning file traversal
 def findCommandInPath(file):
     path = os.environ["PATH"]
