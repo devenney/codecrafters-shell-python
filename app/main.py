@@ -8,7 +8,7 @@ def main():
         # Wait for user input
         user_input = input()
         command = user_input.split()[0]
-        arg_str = user_input.removeprefix(command + '')
+        arg_str = user_input.removeprefix(command + ' ')
 
         match command:
             case "echo":
