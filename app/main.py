@@ -39,15 +39,21 @@ def findCommandInPath(file):
     path = os.environ["PATH"]
 
     dirs = []
+    exts = [""]
+
+    # TODO(devenney): use os.pathsep instead of conditional regex
     if platform.system() == "Windows":
         dirs = re.split(r'[;]', path)
+        exts = os.environ.get("PATHEXT", "")
+        exts = exts.split(os.pathsep)
     else:
         dirs = re.split(r'[:]', path)
 
     for dir in dirs:
-        candidate = os.path.join(dir, file)
-        if os.path.isfile(candidate):
-            return candidate
+        for ext in exts:
+            candidate = os.path.join(dir, file + ext)
+            if os.path.isfile(candidate):
+                return candidate
     return
 
 
