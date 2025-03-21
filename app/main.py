@@ -13,7 +13,7 @@ def main():
         match command:
             case "exit":
                 if len(args) > 0:
-                    exit(args[0])
+                    exit(int(args[0]))
                 else:
                     exit()
             case _:
