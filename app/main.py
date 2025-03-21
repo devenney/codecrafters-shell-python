@@ -40,7 +40,7 @@ def main():
         # Handle empty or pure whitespace
         if not command or command == "":
             continue
-    
+
         # Dispatch command
         if command in commands:
             try:
